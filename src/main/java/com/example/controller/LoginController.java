@@ -1,8 +1,12 @@
 package com.example.controller;
 
+import com.example.async.EventModel;
+import com.example.async.EventProducer;
+import com.example.async.EventType;
 import com.example.service.UserService;
 import com.example.util.DemoUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +20,13 @@ import java.util.Map;
  */
 @Controller
 public class LoginController {
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(LoginController.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     @RequestMapping(path={"/register/"},method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
@@ -34,6 +41,7 @@ public class LoginController {
                     cookie.setMaxAge(3600*24);
                 }
                 response.addCookie(cookie);
+
                 return DemoUtils.getJsonString(0,"注册成功");
             }else{
                 return DemoUtils.getJsonString(1,map);
@@ -59,6 +67,8 @@ public class LoginController {
                     cookie.setMaxAge(3600*24);
                 }
                 response.addCookie(cookie);
+                eventProducer.fireEvent(new EventModel(EventType.LOGIN).setActorId((int)map.get("userId"))
+                .setExt("username",username).setExt("email","981754027@qq.com"));
                 return DemoUtils.getJsonString(0,"登录成功");
             }else{
                 return DemoUtils.getJsonString(1,map);

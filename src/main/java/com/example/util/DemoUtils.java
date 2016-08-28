@@ -3,6 +3,7 @@ package com.example.util;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 
+import java.io.File;
 import java.security.MessageDigest;
 import java.util.Map;
 
@@ -11,6 +12,18 @@ import java.util.Map;
  */
 public class DemoUtils {
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(DemoUtils.class);
+    public static final String DEMO_DOMAIN = "127.0.0.1:8080/";
+    public static final String IMAGE_DIR = "D:"+ File.separator+"upload"+File.separator;
+    public static String[] IMAGE_FILE_EXT = new String[] {"png", "bmp", "jpg", "jpeg","gif"};
+
+    public static boolean isFileAllowed(String fileExt){
+        for(String ext:IMAGE_FILE_EXT){
+            if(ext.equals(fileExt.toLowerCase())){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static String MD5(String key) {
         char hexDigits[] = {
@@ -55,4 +68,7 @@ public class DemoUtils {
         }
         return json.toJSONString();
     }
+
+
+
 }

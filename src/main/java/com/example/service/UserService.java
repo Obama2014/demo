@@ -72,6 +72,8 @@ public class UserService {
             return map;
         }
 
+        map.put("userId",user.getId());
+
         //分派LoginTicket(Token)
         String ticket = addLoginTicket(user.getId());
         map.put("ticket",ticket);
@@ -92,5 +94,9 @@ public class UserService {
 
     public void logout(String ticket){
         loginTicketDao.updateStatus(ticket,1);
+    }
+
+    public User getUser(int userId) {
+        return userDao.selectById(userId);
     }
 }
